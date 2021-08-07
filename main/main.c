@@ -80,7 +80,7 @@ void app_main(void){
     system_init_config();
     //And the light was done. Initialize the LED control thread and perfom an "fade animation"
     LED_init();
-    LED_mode(LED_FADE_ON); //There are a few animations available to choose.
+    LED_mode(LED_FADE_ON); //There are a few animations available to choose.(I choose to keep it off.)
 
     //This is just for debugging pourposes. This MCU is a little weird in terms of memory management. 
     system_info();
@@ -91,7 +91,7 @@ void app_main(void){
     // a different display. 
     display_HAL_init();
 
-    //This initialize the display's backlight control. This is a dirty backligh control module, I plan to change in a near future.
+    //This initialize the display's backlight control. This is a dirty backlight control module, I plan to change in a near future.
     backlight_init();
 
     int8_t backlight_level = system_get_config(SYS_BRIGHT);
@@ -154,6 +154,7 @@ void app_main(void){
     bool game_running = false;
     bool game_executed = false;
     struct SYSTEM_MODE management;
+    LED_mode(LED_FADE_OFF);
 
     //Comments in progress
 
@@ -172,12 +173,11 @@ void app_main(void){
                             vTaskSuspend(gui_handler);
                             gnuboy_execute_game(management.game_name,management.console, management.load_save_game);
                             gnuboy_start();
-                                
                             game_executed = true;
                             game_running=true;
                             console_running = management.console;
                             LED_mode(LED_TURN_OFF);
-                            LED_mode(LED_FADE_ON);
+                            //LED_mode(LED_FADE_ON); I prefer to save power and not have the LED on during gameplay.
 
                         }
                         else if(management.console == NES){
@@ -193,7 +193,7 @@ void app_main(void){
                             game_running=true;
                             console_running = management.console;
                             LED_mode(LED_TURN_OFF);
-                            LED_mode(LED_FADE_ON);
+                           // LED_mode(LED_FADE_ON);
                         }
                         else if(management.console == SMS || management.console == GG){
                             LED_mode(LED_LOAD_ANI);
@@ -204,7 +204,7 @@ void app_main(void){
                             game_running=true;
                             console_running = management.console;
                             LED_mode(LED_TURN_OFF);
-                            LED_mode(LED_FADE_ON);
+                            //LED_mode(LED_FADE_ON);
                         }
                     }
                     else{
