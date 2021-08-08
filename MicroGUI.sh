@@ -181,7 +181,5 @@ while true; do
 done
 }
 
-#do_build
-#do_menu
+#Staring point, You can change this while testing if needed.
 do_start
-#do_find
