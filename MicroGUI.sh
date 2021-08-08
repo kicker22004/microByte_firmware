@@ -104,7 +104,7 @@ PATHTEXT=$(echo $PATH | grep -o ~/esp-ws/esp-idf | tail -n1)
 
 if [ ! "$PATHTEXT" = "/root/esp-ws/esp-idf" ]; then
 	clear
-	echo "Missing Path, Please run (. ./export.sh) from (/esp-ws/esp-idf/) first. Then Re-run ./MicroGUI.sh"
+	echo "Missing Path, Please run (as root user NOT SUDO) (. ./export.sh) from (/root/esp-ws/esp-idf/) first. Then Re-run ./MicroGUI.sh"
 exit 1
 fi
 }
