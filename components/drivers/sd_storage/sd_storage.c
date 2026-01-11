@@ -21,6 +21,7 @@
 #include "system_configuration.h"
 #include "system_manager.h"
 #include "sd_storage.h"
+#include "driver/spi_common.h"
 
 /*********************
  *      DEFINES
@@ -53,17 +54,35 @@ static void organize_list(char *list[30], uint8_t index);
 bool sd_init(){
     ESP_LOGI(TAG, "Init SD Card");
 
-    sdmmc_host_t host = SDSPI_HOST_DEFAULT();
-    sdspi_slot_config_t slot_config = SDSPI_SLOT_CONFIG_DEFAULT();
-    slot_config.gpio_miso   =     VSPI_MISO;
-    slot_config.gpio_mosi   =     VSPI_MOSI;
-    slot_config.gpio_sck    =     VSPI_CLK;
-    slot_config.gpio_cs     =     VSPI_CS0;
-    slot_config.dma_channel =     SPI_DMA_CHAN;
-    host.slot               =     VSPI_HOST;
-    host.max_freq_khz       =     SDMMC_FREQ_DEFAULT;
+    esp_err_t ret;
 
-    // Mount Fat filesystem(Only one file at the time)
+    // Initialize SPI bus
+    spi_bus_config_t bus_cfg = {
+        .mosi_io_num = VSPI_MOSI,
+        .miso_io_num = VSPI_MISO,
+        .sclk_io_num = VSPI_CLK,
+        .quadwp_io_num = -1,
+        .quadhd_io_num = -1,
+        .max_transfer_sz = 4000,
+    };
+
+    ret = spi_bus_initialize(SPI3_HOST, &bus_cfg, SPI_DMA_CH_AUTO);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize SPI bus: %d", ret);
+        return false;
+    }
+
+    // SD card host config
+    sdmmc_host_t host = SDSPI_HOST_DEFAULT();
+    host.slot = SPI3_HOST;
+    host.max_freq_khz = SDMMC_FREQ_DEFAULT;
+
+    // SD card device config
+    sdspi_device_config_t slot_config = SDSPI_DEVICE_CONFIG_DEFAULT();
+    slot_config.gpio_cs = VSPI_CS0;
+    slot_config.host_id = SPI3_HOST;
+
+    // Mount FAT filesystem
     esp_vfs_fat_sdmmc_mount_config_t mount_config = {
         .format_if_mount_failed = false,
         .max_files = 1,
@@ -71,13 +90,13 @@ bool sd_init(){
     };
 
     sdmmc_card_t* card;
-    esp_err_t ret = esp_vfs_fat_sdmmc_mount("/sdcard", &host, &slot_config, &mount_config, &card);
+    ret = esp_vfs_fat_sdspi_mount("/sdcard", &host, &slot_config, &mount_config, &card);
 
     if (ret != ESP_OK) {
         if (ret == ESP_FAIL) {
             ESP_LOGE(TAG, "Failed to mount filesystem.");
         } else {
-            ESP_LOGE(TAG, "Failed to initialize the card.");
+            ESP_LOGE(TAG, "Failed to initialize the card: %s", esp_err_to_name(ret));
         }
         return false;
     }
@@ -132,7 +151,6 @@ bool sd_init(){
     {
         sd_card_info.card_type = SDHC;
     }
-    
 
     ESP_LOGI(TAG,"SD Card detected:\n -Name: %s\n -Capacity: %i MB\n -Speed: %i Khz\n -Type: %i\n" \
     ,sd_card_info.card_name,sd_card_info.card_size,sd_card_info.card_speed,sd_card_info.card_type);

@@ -89,11 +89,8 @@ void batteryTask(void *arg){
 
         if(!game_mode_active){
             // If we're playing, we don't need the battery info. We only need the an alert if we're on very low percentage
-            if( xQueueSend( batteryQueue,&battery_status, ( TickType_t ) 10) != pdPASS ){
-                ESP_LOGE(TAG,"Battery queue send fail");
+             xQueueOverwrite(batteryQueue, &battery_status);
             }
-        }
-        
 
         if(battery_status.percentage<=10 && battery_alert != true){
             //Send battery alert if the level is below 10%

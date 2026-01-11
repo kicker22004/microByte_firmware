@@ -33,31 +33,35 @@ bool TCA955_init(void){
     //Init I2C bus as master
     esp_err_t ret;
 
-    i2c_config_t conf;
-    conf.mode = I2C_MODE_MASTER;
-    conf.sda_io_num = MUX_SDA;
-    conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
-    conf.scl_io_num = MUX_SCL;
-    conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-    conf.master.clk_speed = I2C_CLK ;
+    i2c_config_t conf = {
+        .mode = I2C_MODE_MASTER,
+        .sda_io_num = MUX_SDA,
+        .sda_pullup_en = GPIO_PULLUP_ENABLE,
+        .scl_io_num = MUX_SCL,
+        .scl_pullup_en = GPIO_PULLUP_ENABLE,
+        .master.clk_speed = I2C_CLK,
+        .clk_flags = 0,  // Required in ESP-IDF v4.4+
+};
 
-    i2c_param_config(0, &conf);
+    ret = i2c_param_config(0, &conf);
+    if(ret != ESP_OK){
+        ESP_LOGE(TAG, "I2C param config fail: %d", ret);
+        return false;
+}
 
-    ret =  i2c_driver_install(0, conf.mode,0,0, 0);
-    
+    ret = i2c_driver_install(0, conf.mode, 0, 0, 0);
     if(ret != ESP_OK){
         ESP_LOGE(TAG, "I2C driver initialization fail");
         return false;
-    }
+}
 
     //Check if the device is connected
-    if(TCA955_I2C_write(0,0x00,1) == -1){
+    if(TCA955_I2C_write(0, 0x00, 1) == -1){
         ESP_LOGE(TAG,"TCA9555 not detected");
         return false;
-    }
+}
 
     ESP_LOGI(TAG,"TCA9555 detected");
-
     return true;
 }
 
