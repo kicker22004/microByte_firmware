@@ -43,7 +43,7 @@ extern void *mem_alloc(int size, bool prefer_fast_memory)
 }
 
 /* sound */
-#define DEFAULT_SAMPLERATE 16000
+#define DEFAULT_SAMPLERATE 32000
 #define DEFAULT_FRAGSIZE 64
 static void (*audio_callback)(void *buffer, int length) = NULL;
 static int16_t *audio_frame;

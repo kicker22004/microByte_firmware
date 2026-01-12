@@ -39,7 +39,7 @@ void backlight_init(){
 
     ledc_channel_config(&backlight_led);
 
-    ledc_fade_func_install(0);
+//    ledc_fade_func_install(0); // Already installed in LED_notification.c
 }
 
 void backlight_set(uint8_t level){

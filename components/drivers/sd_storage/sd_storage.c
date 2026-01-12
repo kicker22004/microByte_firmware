@@ -75,7 +75,7 @@ bool sd_init(){
     // SD card host config
     sdmmc_host_t host = SDSPI_HOST_DEFAULT();
     host.slot = SPI3_HOST;
-    host.max_freq_khz = SDMMC_FREQ_DEFAULT;
+    host.max_freq_khz = SDMMC_FREQ_HIGHSPEED;
 
     // SD card device config
     sdspi_device_config_t slot_config = SDSPI_DEVICE_CONFIG_DEFAULT();
@@ -85,7 +85,7 @@ bool sd_init(){
     // Mount FAT filesystem
     esp_vfs_fat_sdmmc_mount_config_t mount_config = {
         .format_if_mount_failed = false,
-        .max_files = 1,
+        .max_files = 2,
         .allocation_unit_size = 16 * 1024
     };
 

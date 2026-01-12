@@ -86,7 +86,7 @@ uint8_t console_use;
 
 bool button_ss_gb = false; //Variable to save if we want to use state save/load buttons
 
-#define AUDIO_SAMPLE_RATE (16000)
+#define AUDIO_SAMPLE_RATE (32000)
 
 /**********************
  *   GLOBAL FUNCTIONS

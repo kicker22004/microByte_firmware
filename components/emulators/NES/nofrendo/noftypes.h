@@ -28,8 +28,8 @@
 
 #include <stdbool.h>
 
-#define NOFRENDO_DEBUG
-#define NOFRENDO_MEM_DEBUG
+//#define NOFRENDO_DEBUG
+//#define NOFRENDO_MEM_DEBUG
 // #define NOFRENDO_VRAM_DEBUG
 // #define NOFRENDO_LOG_TO_FILE
 /* For the ESP32, it costs too much memory to render to a separate buffer and blit that to the main buffer.

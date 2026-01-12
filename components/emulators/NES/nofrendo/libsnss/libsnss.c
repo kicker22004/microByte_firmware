@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "libsnss.h"
+#include "esp_heap_caps.h"
 
 /**************************************************************************/
 /* This section deals with endian-specific code. */
@@ -206,7 +206,7 @@ SNSS_OpenFile(SNSS_FILE **snssFile, const char *filename, SNSS_OPEN_MODE mode)
 {
    if (!snssFileBlock)
    {
-      snssFileBlock = NOFRENDO_MALLOC(sizeof(SNSS_FILE));
+      snssFileBlock = heap_caps_malloc(sizeof(SNSS_FILE), MALLOC_CAP_SPIRAM);
    }
    *snssFile = snssFileBlock;
    if (NULL == *snssFile)

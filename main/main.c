@@ -122,7 +122,7 @@ void app_main(void){
     
     /**************** Peripherals initialization **************/
     //Initialize the peripherals
-    audio_init(AUDIO_SAMPLE_16KHZ);
+    audio_init(AUDIO_SAMPLE_32KHZ);
     sd_init();
 
     // The gamepad control and battery run on thread to avoid block on the code execution while it's running.
