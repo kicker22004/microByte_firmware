@@ -4,10 +4,6 @@ MicroByte is a hand-held, open-source retro console powered by the ESP32-WROVER.
 
 (**If you are looking for general information about this project, please visit: [GitHub microByte](https://github.com/jfm92/microByte)**)
 
-The basic architecture of the software is shown in the following diagram:
-
-// add diagram
-
 If you want to test or modify this software, follow the steps below.
 
 # Development Environment
