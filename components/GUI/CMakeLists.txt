@@ -1,5 +1,5 @@
-file(GLOB_RECURSE SOURCES LVGL/src/*.c)
-idf_component_register(SRCS ${SOURCES}
-                       INCLUDE_DIRS . LVGL)
-
-target_compile_definitions(${COMPONENT_LIB} INTERFACE LV_CONF_INCLUDE_SIMPLE=1)
+idf_component_register(
+    SRCS "GUI.c" "GUI_frontend.c"
+    INCLUDE_DIRS "." "icons"
+    REQUIRES lvgl display_HAL sd_storage battery user_input backlight_ctrl system_configuration GBC NES SMS OTA
+)

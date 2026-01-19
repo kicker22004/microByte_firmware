@@ -33,7 +33,7 @@
 #include "LED_notification.h"
 #include "backlight_ctrl.h"
 
-uint8_t console_running = NULL;
+uint8_t console_running = 0;
 
 TaskHandle_t gui_handler;
 TaskHandle_t intro_handler;
@@ -135,7 +135,7 @@ void app_main(void){
     update_check();
 
     //The boot animation is fancy, let's wait a little to see it
-    if(boot_screen_ani) vTaskDelay(2000 / portTICK_RATE_MS);
+    if(boot_screen_ani) vTaskDelay(1000 / portTICK_RATE_MS);
     
     //Once we don't need the boot screen, we will delete the task and free the resources.
     vTaskDelete(intro_handler);

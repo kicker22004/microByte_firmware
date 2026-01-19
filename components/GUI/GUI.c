@@ -13,7 +13,7 @@
 #include "display_HAL.h"
 #include "GUI_frontend.h"
 
-#include "LVGL/lvgl.h"
+#include "lvgl.h"
 
 /*********************
  *      DEFINES

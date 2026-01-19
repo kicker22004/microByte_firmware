@@ -8,9 +8,10 @@
 
 #include "freertos/FreeRTOS.h"
 
-#include "esp_log.h"
-#include "esp_system.h"
-#include "esp_ota_ops.h"
+#include <esp_log.h>
+#include "esp_ota_ops.h"      // you may still include this if API functions exist
+  // new header in app_update
+
 
 /**********************
 *  STATIC VARIABLES
